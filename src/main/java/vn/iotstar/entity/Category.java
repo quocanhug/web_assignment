@@ -30,6 +30,10 @@ public class Category implements Serializable {
     @OneToMany(mappedBy = "category")
     private List<Video> videos;
 
+    // bi-directional many-to-one association to Product
+    @OneToMany(mappedBy = "category")
+    private List<Product> products;
+
     public Category() {
     }
 

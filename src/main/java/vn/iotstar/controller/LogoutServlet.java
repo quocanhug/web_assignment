@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-@WebServlet(urlPatterns = { "/logout" })
+@WebServlet(urlPatterns = { "/account/logout" })
 public class LogoutServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -23,6 +23,6 @@ public class LogoutServlet extends HttpServlet {
             session.invalidate(); // xóa toàn bộ session
         }
         // Chuyển về trang login
-        resp.sendRedirect(req.getContextPath() + "/login.html");
+        resp.sendRedirect(req.getContextPath() + "/account/login");
     }
 }

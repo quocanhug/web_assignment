@@ -8,6 +8,8 @@
     <persistence-unit name="jpa-hibernate-mysql">
         <class>vn.iotstar.entity.Category</class>
         <class>vn.iotstar.entity.Video</class>
+        <class>vn.iotstar.entity.User</class>
+        <class>vn.iotstar.entity.Product</class>
         <properties>
             <!-- Cấu hình kết nối SQL Server - SỬA LẠI CHO ĐÚNG MÁY BẠN -->
             <property name="jakarta.persistence.jdbc.url"
