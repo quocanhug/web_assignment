@@ -29,6 +29,12 @@ public class User implements Serializable {
     @Column(name = "is_active")
     private Boolean isActive = false;
 
+    @Column(name = "phone", columnDefinition = "nvarchar(20)")
+    private String phone;
+
+    @Column(name = "image", columnDefinition = "nvarchar(500)")
+    private String image;
+
     @Column(name = "otp", columnDefinition = "varchar(6)")
     private String otp;
 
@@ -77,6 +83,22 @@ public class User implements Serializable {
 
     public void setIsActive(Boolean isActive) {
         this.isActive = isActive != null ? isActive : false;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getOtp() {

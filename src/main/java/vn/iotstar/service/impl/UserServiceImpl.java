@@ -119,4 +119,14 @@ public class UserServiceImpl implements IUserService {
         }
         return false;
     }
+
+    @Override
+    public User findById(int userId) {
+        return userDao.findById(userId);
+    }
+
+    @Override
+    public void updateProfile(User user) {
+        userDao.update(user);
+    }
 }

@@ -38,6 +38,7 @@
         <ul class="menu">
             <li><a class="green" href="${pageContext.request.contextPath}/account/login">🔐 Đăng nhập</a></li>
             <li><a class="green" href="${pageContext.request.contextPath}/account/register">📝 Đăng ký</a></li>
+            <li><a class="purple" href="${pageContext.request.contextPath}/account/profile">👤 Hồ sơ cá nhân (Profile)</a></li>
         </ul>
 
         <p class="section-title">Quản trị</p>

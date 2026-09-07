@@ -64,6 +64,13 @@
 			<version>2.0.1</version>
 		</dependency>
 
+		<!-- SiteMesh 3 Layout Decorator -->
+		<dependency>
+			<groupId>org.sitemesh</groupId>
+			<artifactId>sitemesh</artifactId>
+			<version>3.2.2</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

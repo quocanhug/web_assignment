@@ -8,4 +8,6 @@ public interface IUserService {
     User login(String email, String password);
     boolean generateOtpForForgotPassword(String email);
     boolean resetPassword(String email, String otp, String newPassword);
+    User findById(int userId);
+    void updateProfile(User user);
 }

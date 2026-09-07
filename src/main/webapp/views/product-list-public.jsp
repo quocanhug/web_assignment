@@ -7,17 +7,6 @@
     <meta charset="UTF-8">
     <title>Sản phẩm - WebShop</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background: #f5f5f5; }
-
-        /* === NAVBAR === */
-        .navbar { background: linear-gradient(135deg, #667eea, #764ba2); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-        .navbar .logo { color: white; font-size: 22px; font-weight: bold; text-decoration: none; }
-        .navbar .nav-links { display: flex; gap: 20px; align-items: center; }
-        .navbar .nav-links a { color: white; text-decoration: none; font-size: 14px; padding: 8px 16px; border-radius: 20px; transition: all 0.3s; }
-        .navbar .nav-links a:hover { background: rgba(255,255,255,0.2); }
-        .navbar .nav-links a.active { background: rgba(255,255,255,0.3); }
-
         /* === PAGE HEADER === */
         .page-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-align: center; padding: 40px 20px 30px; }
         .page-header h1 { font-size: 28px; margin-bottom: 5px; }
@@ -49,25 +38,6 @@
     </style>
 </head>
 <body>
-    <!-- NAVBAR -->
-    <div class="navbar">
-        <a href="${pageContext.request.contextPath}/home" class="logo">🛒 WebShop</a>
-        <div class="nav-links">
-            <a href="${pageContext.request.contextPath}/home">Trang chủ</a>
-            <a href="${pageContext.request.contextPath}/product" class="active">Sản phẩm</a>
-            <c:choose>
-                <c:when test="${not empty sessionScope.user}">
-                    <a href="#">Xin chào, ${sessionScope.user.fullname}</a>
-                    <a href="${pageContext.request.contextPath}/account/logout">Đăng xuất</a>
-                </c:when>
-                <c:otherwise>
-                    <a href="${pageContext.request.contextPath}/account/login">Đăng nhập</a>
-                    <a href="${pageContext.request.contextPath}/account/register">Đăng ký</a>
-                </c:otherwise>
-            </c:choose>
-        </div>
-    </div>
-
     <!-- PAGE HEADER -->
     <div class="page-header">
         <h1>Tất cả sản phẩm</h1>

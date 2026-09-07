@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemesh>
+    <!-- Áp dụng layout chung cho các trang public -->
+    <mapping path="/home" decorator="/decorators/main.jsp"/>
+    <mapping path="/product" decorator="/decorators/main.jsp"/>
+    <mapping path="/product/detail" decorator="/decorators/main.jsp"/>
+    <mapping path="/account/profile" decorator="/decorators/main.jsp"/>
+
+    <!-- Loại trừ các trang không cần layout chung -->
+    <mapping path="/account/login" exclude="true"/>
+    <mapping path="/account/register" exclude="true"/>
+    <mapping path="/account/verify" exclude="true"/>
+    <mapping path="/account/forgot-password" exclude="true"/>
+    <mapping path="/account/reset-password" exclude="true"/>
+    <mapping path="/admin/*" exclude="true"/>
+    <mapping path="/image" exclude="true"/>
+    <mapping path="/index.jsp" exclude="true"/>
+</sitemesh>

@@ -1,59 +1,122 @@
 package vn.iotstar.controller;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Part;
 
-@WebServlet(urlPatterns = { "/profile" })
+import vn.iotstar.entity.User;
+import vn.iotstar.service.IUserService;
+import vn.iotstar.service.impl.UserServiceImpl;
+import vn.iotstar.util.Constant;
+
+@MultipartConfig()
+@WebServlet(urlPatterns = { "/account/profile" })
 public class ProfileServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+    private IUserService userService = new UserServiceImpl();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-        resp.setContentType("text/html");
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
-        PrintWriter out = resp.getWriter();
 
-        // Lấy session (false = không tạo mới nếu chưa có)
         HttpSession session = req.getSession(false);
-        String name = null;
-
-        if (session != null) {
-            Object obj = session.getAttribute("username");
-            if (obj != null) {
-                name = String.valueOf(obj);
-            }
-        }
-
-        // Nếu session không có username -> chuyển về trang login
-        if (name == null) {
-            resp.sendRedirect(req.getContextPath() + "/login-session");
+        if (session == null || session.getAttribute("user") == null) {
+            resp.sendRedirect(req.getContextPath() + "/account/login");
             return;
         }
 
-        // Hiển thị thông tin profile
-        out.println("<!DOCTYPE html>");
-        out.println("<html><head><meta charset='UTF-8'><title>Profile - Session</title>");
-        out.println("<style>body{font-family:Arial;margin:40px;background:#f5f5f5;}"
-                + ".container{max-width:500px;margin:0 auto;background:white;padding:30px;"
-                + "border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.1);text-align:center;}"
-                + "a{color:#e91e63;}</style></head><body>");
-        out.println("<div class='container'>");
-        out.println("<h1>Chào " + name + "!</h1>");
-        out.println("<p>Bạn đã đăng nhập thành công bằng <b>Session</b>.</p>");
-        out.println("<p>Session ID: " + session.getId() + "</p>");
-        out.println("<p>Session sẽ hết hạn sau 30 giây không hoạt động.</p>");
-        out.println("<a href='" + req.getContextPath() + "/logout'>Đăng xuất (Hủy Session)</a>");
-        out.println(" | <a href='" + req.getContextPath() + "/login.html'>Về trang Login</a>");
-        out.println("</div></body></html>");
-        out.close();
+        // Load lại user mới nhất từ DB
+        User sessionUser = (User) session.getAttribute("user");
+        User user = userService.findById(sessionUser.getUserId());
+        if (user == null) {
+            resp.sendRedirect(req.getContextPath() + "/account/login");
+            return;
+        }
+
+        req.setAttribute("user", user);
+        req.getRequestDispatcher("/views/profile.jsp").forward(req, resp);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
+        resp.setCharacterEncoding("UTF-8");
+
+        HttpSession session = req.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            resp.sendRedirect(req.getContextPath() + "/account/login");
+            return;
+        }
+
+        User sessionUser = (User) session.getAttribute("user");
+        User user = userService.findById(sessionUser.getUserId());
+        if (user == null) {
+            resp.sendRedirect(req.getContextPath() + "/account/login");
+            return;
+        }
+
+        // Nhận dữ liệu từ form
+        String fullname = req.getParameter("fullname");
+        String phone = req.getParameter("phone");
+
+        if (fullname != null && !fullname.trim().isEmpty()) {
+            user.setFullname(fullname.trim());
+        }
+        user.setPhone(phone != null ? phone.trim() : "");
+
+        // Xử lý upload ảnh
+        String uploadPath = Constant.DIR;
+        File uploadDir = new File(uploadPath);
+        if (!uploadDir.exists()) uploadDir.mkdirs();
+
+        try {
+            Part part = req.getPart("avatar");
+            if (part != null && part.getSize() > 0) {
+                // Xóa file ảnh cũ
+                String oldImage = user.getImage();
+                if (oldImage != null && !oldImage.isEmpty()) {
+                    try {
+                        Path oldPath = Paths.get(uploadPath + "/" + oldImage);
+                        Files.deleteIfExists(oldPath);
+                    } catch (Exception ex) {
+                        // file cũ không tồn tại, bỏ qua
+                    }
+                }
+
+                // Lưu file mới
+                String filename = Paths.get(part.getSubmittedFileName()).getFileName().toString();
+                int index = filename.lastIndexOf(".");
+                String ext = filename.substring(index + 1);
+                String fname = "user_" + user.getUserId() + "_" + System.currentTimeMillis() + "." + ext;
+                part.write(uploadPath + "/" + fname);
+                user.setImage(fname);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Cập nhật vào DB
+        userService.updateProfile(user);
+
+        // Cập nhật lại session
+        session.setAttribute("user", user);
+        session.setAttribute("username", user.getFullname());
+
+        // Flash message
+        session.setAttribute("success", "Cập nhật hồ sơ thành công!");
+        resp.sendRedirect(req.getContextPath() + "/account/profile");
     }
 }
