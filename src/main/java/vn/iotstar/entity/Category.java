@@ -77,6 +77,14 @@ public class Category implements Serializable {
         this.videos = videos;
     }
 
+    public List<Product> getProducts() {
+        return this.products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
     public Video addVideo(Video video) {
         getVideos().add(video);
         video.setCategory(this);

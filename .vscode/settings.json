@@ -1,3 +1,4 @@
 {
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "tomcat.workspace": "D:\\uni\\hk1nam3\\web\\tools\\apache-tomcat-10.1.59"
 }

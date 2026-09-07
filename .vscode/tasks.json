@@ -1,0 +1,48 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Tomcat 10.1: Build & Deploy & Start",
+            "type": "shell",
+            "command": "mvn package -DskipTests && copy /Y target\\web_assignment.war D:\\uni\\hk1nam3\\web\\tools\\apache-tomcat-10.1.59\\webapps\\ && set CATALINA_HOME=D:\\uni\\hk1nam3\\web\\tools\\apache-tomcat-10.1.59&& set CATALINA_BASE=D:\\uni\\hk1nam3\\web\\tools\\apache-tomcat-10.1.59&& cd /d D:\\uni\\hk1nam3\\web\\tools\\apache-tomcat-10.1.59\\bin&& catalina.bat run",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new",
+                "focus": true
+            }
+        },
+        {
+            "label": "Tomcat 10.1: Start Server",
+            "type": "shell",
+            "command": "set CATALINA_HOME=D:\\uni\\hk1nam3\\web\\tools\\apache-tomcat-10.1.59&& set CATALINA_BASE=D:\\uni\\hk1nam3\\web\\tools\\apache-tomcat-10.1.59&& cd /d D:\\uni\\hk1nam3\\web\\tools\\apache-tomcat-10.1.59\\bin&& catalina.bat run",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new",
+                "focus": true
+            }
+        },
+        {
+            "label": "Tomcat 10.1: Stop Server",
+            "type": "shell",
+            "command": "set CATALINA_HOME=D:\\uni\\hk1nam3\\web\\tools\\apache-tomcat-10.1.59&& set CATALINA_BASE=D:\\uni\\hk1nam3\\web\\tools\\apache-tomcat-10.1.59&& cd /d D:\\uni\\hk1nam3\\web\\tools\\apache-tomcat-10.1.59\\bin&& shutdown.bat",
+            "problemMatcher": []
+        },
+        {
+            "label": "Tomcat 10.1: Run via Maven Cargo",
+            "type": "shell",
+            "command": "mvn cargo:run",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new",
+                "focus": true
+            }
+        }
+    ]
+}

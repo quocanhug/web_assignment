@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "tomcat",
+            "name": "Tomcat 10.1 (Smart Tomcat Extension)",
+            "request": "launch",
+            "tomcat": "D:\\uni\\hk1nam3\\web\\tools\\apache-tomcat-10.1.59",
+            "directory": "${workspaceFolder}/src/main/webapp",
+            "context": "/web_assignment",
+            "port": "8080"
+        }
+    ]
+}

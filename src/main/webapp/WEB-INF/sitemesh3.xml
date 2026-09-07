@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sitemesh>
+    <decorator-prefix>/WEB-INF/decorators/</decorator-prefix>
+
     <!-- Áp dụng layout chung cho các trang public -->
-    <mapping path="/home" decorator="/decorators/main.jsp"/>
-    <mapping path="/product" decorator="/decorators/main.jsp"/>
-    <mapping path="/product/detail" decorator="/decorators/main.jsp"/>
-    <mapping path="/account/profile" decorator="/decorators/main.jsp"/>
+    <mapping path="/home" decorator="main.jsp"/>
+    <mapping path="/product" decorator="main.jsp"/>
+    <mapping path="/product/detail" decorator="main.jsp"/>
+    <mapping path="/account/profile" decorator="main.jsp"/>
 
     <!-- Loại trừ các trang không cần layout chung -->
     <mapping path="/account/login" exclude="true"/>

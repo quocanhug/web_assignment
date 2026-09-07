@@ -49,6 +49,12 @@
 
     <!-- NỘI DUNG TRANG -->
     <div class="main-content">
+        <c:if test="${not empty sessionScope.success}">
+            <div style="max-width: 800px; margin: 20px auto 0; padding: 12px 20px; background: #eafff0; color: #27ae60; border-radius: 8px; text-align: center; font-size: 14px; font-weight: bold; border: 1px solid #b7eb8f; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                ✅ ${sessionScope.success}
+            </div>
+            <c:remove var="success" scope="session"/>
+        </c:if>
         <sitemesh:write property='body'/>
     </div>
 

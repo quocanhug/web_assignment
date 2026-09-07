@@ -117,6 +117,6 @@ public class ProfileServlet extends HttpServlet {
 
         // Flash message
         session.setAttribute("success", "Cập nhật hồ sơ thành công!");
-        resp.sendRedirect(req.getContextPath() + "/account/profile");
+        resp.sendRedirect(req.getContextPath() + "/home");
     }
 }

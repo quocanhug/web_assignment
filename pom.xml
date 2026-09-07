@@ -6,30 +6,30 @@
 	<packaging>war</packaging>
 
 	<dependencies>
-		<!-- Jakarta Servlet API -->
+		<!-- Jakarta Servlet API (Tomcat 10.1 - Servlet 6.0) -->
 		<dependency>
 			<groupId>jakarta.servlet</groupId>
 			<artifactId>jakarta.servlet-api</artifactId>
-			<version>6.1.0</version>
+			<version>6.0.0</version>
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- Jakarta JSP API -->
+		<!-- Jakarta JSP API (Tomcat 10.1 - JSP 3.1) -->
 		<dependency>
 			<groupId>jakarta.servlet.jsp</groupId>
 			<artifactId>jakarta.servlet.jsp-api</artifactId>
-			<version>4.0.0</version>
+			<version>3.1.1</version>
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- JSTL API for Jakarta -->
+		<!-- JSTL API for Jakarta (Tomcat 10.1 - JSTL 3.0) -->
 		<dependency>
 			<groupId>jakarta.servlet.jsp.jstl</groupId>
 			<artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
 			<version>3.0.2</version>
 		</dependency>
 
-		<!-- JSTL Implementation for Jakarta (Tomcat 10+/11) -->
+		<!-- JSTL Implementation for Jakarta (Tomcat 10.1) -->
 		<dependency>
 			<groupId>org.glassfish.web</groupId>
 			<artifactId>jakarta.servlet.jsp.jstl</artifactId>
@@ -74,26 +74,56 @@
 	</dependencies>
 
 	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.15.0</version>
+		<finalName>web_assignment</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.15.0</version>
+				<configuration>
+					<release>21</release>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.5.1</version>
+				<configuration>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.cargo</groupId>
+				<artifactId>cargo-maven3-plugin</artifactId>
+				<version>1.10.13</version>
+				<configuration>
+					<container>
+						<containerId>tomcat10x</containerId>
+						<type>installed</type>
+						<home>D:/uni/hk1nam3/web/tools/apache-tomcat-10.1.59</home>
+					</container>
 					<configuration>
-						<source>21</source>
-						<target>21</target>
+						<type>existing</type>
+						<home>D:/uni/hk1nam3/web/tools/apache-tomcat-10.1.59</home>
+						<properties>
+							<cargo.servlet.port>8080</cargo.servlet.port>
+						</properties>
 					</configuration>
-				</plugin>
-
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-war-plugin</artifactId>
-					<version>3.5.1</version>
-				</plugin>
-
-			</plugins>
-		</pluginManagement>
+					<deployables>
+						<deployable>
+							<groupId>baitapweb</groupId>
+							<artifactId>web_assignment</artifactId>
+							<type>war</type>
+							<properties>
+								<context>/web_assignment</context>
+							</properties>
+						</deployable>
+					</deployables>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 
 </project>
