@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sitemesh>
-    <decorator-prefix>/WEB-INF/decorators/</decorator-prefix>
+    <decorator-prefix>/decorators/</decorator-prefix>
 
-    <!-- Áp dụng layout chung cho các trang public -->
-    <mapping path="/home" decorator="main.jsp"/>
-    <mapping path="/product" decorator="main.jsp"/>
-    <mapping path="/product/detail" decorator="main.jsp"/>
-    <mapping path="/account/profile" decorator="main.jsp"/>
+    <!-- 1. Layout cho trang Quản trị Admin -->
+    <mapping path="/admin/*" name="admin" decorator="admin.jsp"/>
 
-    <!-- Loại trừ các trang không cần layout chung -->
+    <!-- 2. Layout cho toàn bộ trang Web người dùng -->
+    <mapping path="/*" name="web" decorator="web.jsp"/>
+
+    <!-- 3. Loại trừ các đường dẫn không dùng Decorator Layout -->
+    <mapping path="/api*" exclude="true"/>
+    <mapping path="/image*" exclude="true"/>
     <mapping path="/account/login" exclude="true"/>
     <mapping path="/account/register" exclude="true"/>
     <mapping path="/account/verify" exclude="true"/>
     <mapping path="/account/forgot-password" exclude="true"/>
     <mapping path="/account/reset-password" exclude="true"/>
-    <mapping path="/admin/*" exclude="true"/>
-    <mapping path="/image" exclude="true"/>
+    <mapping path="/login.html" exclude="true"/>
     <mapping path="/index.jsp" exclude="true"/>
 </sitemesh>
