@@ -10,6 +10,7 @@
         .container { max-width: 420px; margin: 0 auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); text-align: center; }
         h2 { color: #333; margin-bottom: 10px; }
         .subtitle { color: #777; font-size: 14px; margin-bottom: 25px; }
+        label { display: block; text-align: left; margin-top: 15px; font-weight: bold; color: #555; font-size: 14px; }
         input[type="email"] { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 14px; transition: border-color 0.3s; }
         input:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
         .btn { width: 100%; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 20px; transition: all 0.3s; }
@@ -20,6 +21,15 @@
         .links a { color: #667eea; text-decoration: none; font-weight: bold; }
         .links a:hover { text-decoration: underline; }
         .icon { font-size: 48px; margin-bottom: 10px; }
+
+        *[id$=.errors] {
+            color: #dc3545;
+            font-style: italic;
+            font-size: 13px;
+            margin-top: 4px;
+            display: block;
+            text-align: left;
+        }
     </style>
 </head>
 <body>
@@ -33,7 +43,9 @@
         </c:if>
 
         <form action="${pageContext.request.contextPath}/account/forgot-password" method="post">
-            <input type="email" name="email" placeholder="Nhập email đã đăng ký" required/>
+            <input type="email" name="email" value="${not empty email ? email : param.email}" placeholder="Nhập email đã đăng ký" required/>
+            <span id="email.errors">${errors.email}</span>
+
             <button type="submit" class="btn btn-submit">Gửi mã OTP</button>
         </form>
 

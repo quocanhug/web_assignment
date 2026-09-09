@@ -14,6 +14,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Roboto', Arial, sans-serif; background-color: #f8f9fa; }
+        *[id$=.errors] {
+            color: #dc3545;
+            font-style: italic;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: block;
+        }
     </style>
     <sitemesh:write property="head"/>
 </head>

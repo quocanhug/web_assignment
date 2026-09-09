@@ -21,6 +21,15 @@
         .links a { color: #667eea; text-decoration: none; font-weight: bold; margin: 0 10px; }
         .links a:hover { text-decoration: underline; }
         .divider { border-top: 1px solid #eee; margin: 15px 0; }
+
+        *[id$=.errors] {
+            color: #dc3545;
+            font-style: italic;
+            font-size: 13px;
+            margin-top: 4px;
+            display: block;
+            text-align: left;
+        }
     </style>
 </head>
 <body>
@@ -37,10 +46,12 @@
 
         <form action="${pageContext.request.contextPath}/account/login" method="post">
             <label>Email:</label>
-            <input type="email" name="email" placeholder="Nhập email" required/>
+            <input type="email" name="email" value="${not empty email ? email : param.email}" placeholder="Nhập email" required/>
+            <span id="email.errors">${errors.email}</span>
 
             <label>Mật khẩu:</label>
             <input type="password" name="password" placeholder="Nhập mật khẩu" required/>
+            <span id="password.errors">${errors.password}</span>
 
             <button type="submit" class="btn btn-submit">Đăng nhập</button>
         </form>

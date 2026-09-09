@@ -18,6 +18,14 @@
         .btn-reset { background: #2196F3; }
         .back-link { display: inline-block; margin-bottom: 15px; color: #666; text-decoration: none; }
         .current-img { margin-top: 10px; }
+
+        *[id$=.errors] {
+            color: #dc3545;
+            font-style: italic;
+            font-size: 13px;
+            margin-top: 4px;
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -28,8 +36,9 @@
         <form action="<c:url value="/admin/category/update"/>" method="post" enctype="multipart/form-data">
             <input type="hidden" name="categoryid" value="${cate.categoryid}"/>
 
-            <label>Tên danh mục:</label>
+            <label>Tên danh mục: <span style="color:red;">*</span></label>
             <input type="text" name="categoryname" value="${cate.categoryname}" required/>
+            <span id="categoryname.errors">${errors.categoryname}</span>
 
             <label>Link ảnh (URL):</label>
             <input type="text" name="images" value="${cate.images}"/>
@@ -53,7 +62,8 @@
             </div>
 
             <label>Upload ảnh mới:</label>
-            <input type="file" name="images1"/>
+            <input type="file" name="images1" accept="image/*"/>
+            <span id="images1.errors">${errors.images1}</span>
 
             <label>Trạng thái:</label>
             <div class="radio-group">

@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -19,6 +21,7 @@ import vn.iotstar.entity.User;
 import vn.iotstar.service.IUserService;
 import vn.iotstar.service.impl.UserServiceImpl;
 import vn.iotstar.util.Constant;
+import vn.iotstar.util.ValidationUtil;
 
 @MultipartConfig()
 @WebServlet(urlPatterns = { "/account/profile" })
@@ -71,19 +74,62 @@ public class ProfileServlet extends HttpServlet {
         // Nhận dữ liệu từ form
         String fullname = req.getParameter("fullname");
         String phone = req.getParameter("phone");
-
-        if (fullname != null && !fullname.trim().isEmpty()) {
-            user.setFullname(fullname.trim());
+        Part part = null;
+        try {
+            part = req.getPart("avatar");
+        } catch (Exception e) {
+            // bỏ qua
         }
+
+        Map<String, String> errors = new HashMap<>();
+
+        // 1. Kiểm tra Họ và tên
+        if (ValidationUtil.isBlank(fullname)) {
+            errors.put("fullname", "Họ và tên không được để trống.");
+        } else if (fullname.trim().length() < 2 || fullname.trim().length() > 50) {
+            errors.put("fullname", "Họ và tên phải từ 2 đến 50 ký tự.");
+        }
+
+        // 2. Kiểm tra Số điện thoại
+        if (!ValidationUtil.isBlank(phone) && !ValidationUtil.isValidPhone(phone)) {
+            errors.put("phone", "Số điện thoại không đúng định dạng (10 số, vd: 0912345678).");
+        }
+
+        // 3. Kiểm tra file Avatar upload
+        if (part != null && part.getSize() > 0) {
+            if (!ValidationUtil.isImageFile(part)) {
+                errors.put("avatar", "File ảnh không đúng định dạng. Chỉ chấp nhận JPG, PNG, GIF, WEBP.");
+            } else if (!ValidationUtil.isFileSizeValid(part, ValidationUtil.MAX_IMAGE_SIZE)) {
+                errors.put("avatar", "Dung lượng file ảnh đại diện không được vượt quá 5MB.");
+            }
+        }
+
+        // Nếu có lỗi validation
+        if (!errors.isEmpty()) {
+            // Giữ lại giá trị người dùng vừa nhập
+            User tempUser = new User();
+            tempUser.setUserId(user.getUserId());
+            tempUser.setEmail(user.getEmail());
+            tempUser.setFullname(fullname);
+            tempUser.setPhone(phone);
+            tempUser.setImage(user.getImage());
+
+            req.setAttribute("user", tempUser);
+            req.setAttribute("errors", errors);
+            req.getRequestDispatcher("/views/profile.jsp").forward(req, resp);
+            return;
+        }
+
+        // Cập nhật thông tin hợp lệ
+        user.setFullname(fullname.trim());
         user.setPhone(phone != null ? phone.trim() : "");
 
-        // Xử lý upload ảnh
+        // Xử lý upload ảnh nếu có
         String uploadPath = Constant.DIR;
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) uploadDir.mkdirs();
 
         try {
-            Part part = req.getPart("avatar");
             if (part != null && part.getSize() > 0) {
                 // Xóa file ảnh cũ
                 String oldImage = user.getImage();
@@ -116,7 +162,7 @@ public class ProfileServlet extends HttpServlet {
         session.setAttribute("username", user.getFullname());
 
         // Flash message
-        session.setAttribute("success", "Cập nhật hồ sơ thành công!");
+        session.setAttribute("success", "Cập nhật hồ sơ cá nhân thành công!");
         resp.sendRedirect(req.getContextPath() + "/home");
     }
 }

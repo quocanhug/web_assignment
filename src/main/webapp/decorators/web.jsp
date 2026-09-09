@@ -15,6 +15,13 @@
     <style>
         body { font-family: 'Roboto', Arial, sans-serif; }
         .hover-white:hover { color: #fff !important; }
+        *[id$=.errors] {
+            color: #dc3545;
+            font-style: italic;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: block;
+        }
     </style>
     <sitemesh:write property="head"/>
 </head>

@@ -20,6 +20,14 @@
         .btn-reset { background: #2196F3; }
         .back-link { display: inline-block; margin-bottom: 15px; color: #666; text-decoration: none; }
         .current-img { margin-top: 10px; }
+
+        *[id$=.errors] {
+            color: #dc3545;
+            font-style: italic;
+            font-size: 13px;
+            margin-top: 4px;
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -30,22 +38,25 @@
         <form action="<c:url value="/admin/product/update"/>" method="post" enctype="multipart/form-data">
             <input type="hidden" name="productId" value="${product.productId}"/>
 
-            <label>Tên sản phẩm:</label>
+            <label>Tên sản phẩm: <span style="color:red;">*</span></label>
             <input type="text" name="productName" value="${product.productName}" required/>
+            <span id="productName.errors">${errors.productName}</span>
 
-            <label>Giá:</label>
+            <label>Giá (VNĐ): <span style="color:red;">*</span></label>
             <input type="number" name="price" value="${product.price}" step="1000" min="0" required/>
+            <span id="price.errors">${errors.price}</span>
 
             <label>Mô tả:</label>
             <textarea name="description">${product.description}</textarea>
 
-            <label>Danh mục:</label>
+            <label>Danh mục: <span style="color:red;">*</span></label>
             <select name="cateId" required>
                 <option value="">-- Chọn danh mục --</option>
                 <c:forEach items="${categories}" var="cate">
                     <option value="${cate.categoryid}" ${product.category != null && product.category.categoryid == cate.categoryid ? 'selected' : ''}>${cate.categoryname}</option>
                 </c:forEach>
             </select>
+            <span id="cateId.errors">${errors.cateId}</span>
 
             <label>Link ảnh (URL):</label>
             <input type="text" name="imageUrl" value="${product.image}"/>
@@ -69,7 +80,8 @@
             </div>
 
             <label>Upload ảnh mới:</label>
-            <input type="file" name="imageFile"/>
+            <input type="file" name="imageFile" accept="image/*"/>
+            <span id="imageFile.errors">${errors.imageFile}</span>
 
             <label>Trạng thái:</label>
             <div class="radio-group">

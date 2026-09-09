@@ -17,6 +17,14 @@
         .btn-submit { background: #4CAF50; }
         .btn-reset { background: #2196F3; }
         .back-link { display: inline-block; margin-bottom: 15px; color: #666; text-decoration: none; }
+
+        *[id$=.errors] {
+            color: #dc3545;
+            font-style: italic;
+            font-size: 13px;
+            margin-top: 4px;
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -26,20 +34,22 @@
 
         <form action="<c:url value="/admin/category/insert"/>" method="post" enctype="multipart/form-data">
 
-            <label>Tên danh mục:</label>
-            <input type="text" name="categoryname" placeholder="Nhập tên danh mục" required/>
+            <label>Tên danh mục: <span style="color:red;">*</span></label>
+            <input type="text" name="categoryname" value="${not empty categoryname ? categoryname : param.categoryname}" placeholder="Nhập tên danh mục" required/>
+            <span id="categoryname.errors">${errors.categoryname}</span>
 
             <label>Link ảnh (URL):</label>
-            <input type="text" name="images" placeholder="https://... (tùy chọn)"/>
+            <input type="text" name="images" value="${not empty images ? images : param.images}" placeholder="https://... (tùy chọn)"/>
 
             <label>Upload ảnh:</label>
-            <input type="file" name="images1"/>
+            <input type="file" name="images1" accept="image/*"/>
+            <span id="images1.errors">${errors.images1}</span>
 
             <label>Trạng thái:</label>
             <div class="radio-group">
-                <input type="radio" name="status" value="1" checked>
+                <input type="radio" name="status" value="1" ${empty status || status == 1 ? 'checked' : ''}>
                 <label>Hoạt động</label>
-                <input type="radio" name="status" value="0">
+                <input type="radio" name="status" value="0" ${status == 0 ? 'checked' : ''}>
                 <label>Khóa</label>
             </div>
 

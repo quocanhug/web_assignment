@@ -1,6 +1,8 @@
 package vn.iotstar.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -10,6 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import vn.iotstar.service.IUserService;
 import vn.iotstar.service.impl.UserServiceImpl;
+import vn.iotstar.util.ValidationUtil;
 
 @WebServlet(urlPatterns = { "/account/verify" })
 public class VerifyOtpController extends HttpServlet {
@@ -45,7 +48,23 @@ public class VerifyOtpController extends HttpServlet {
             return;
         }
 
-        boolean success = userService.activate(email.trim(), otp != null ? otp.trim() : "");
+        Map<String, String> errors = new HashMap<>();
+
+        if (ValidationUtil.isBlank(otp)) {
+            errors.put("otp", "Vui lòng nhập mã OTP xác nhận.");
+        } else if (!ValidationUtil.isValidOtp(otp)) {
+            errors.put("otp", "Mã OTP phải bao gồm đúng 6 chữ số.");
+        }
+
+        if (!errors.isEmpty()) {
+            req.setAttribute("email", email);
+            req.setAttribute("otp", otp);
+            req.setAttribute("errors", errors);
+            req.getRequestDispatcher("/views/verify-otp.jsp").forward(req, resp);
+            return;
+        }
+
+        boolean success = userService.activate(email.trim(), otp.trim());
 
         if (success) {
             // Xóa dữ liệu OTP khỏi session
@@ -56,7 +75,10 @@ public class VerifyOtpController extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + "/account/login");
         } else {
             req.setAttribute("email", email);
-            req.setAttribute("error", "Mã OTP không đúng hoặc đã hết hạn. Vui lòng thử lại.");
+            req.setAttribute("otp", otp);
+            errors.put("otp", "Mã OTP không đúng hoặc đã hết hạn (chỉ có hiệu lực trong 5 phút).");
+            req.setAttribute("errors", errors);
+            req.setAttribute("error", "Kích hoạt thất bại. Vui lòng kiểm tra lại mã OTP.");
             req.getRequestDispatcher("/views/verify-otp.jsp").forward(req, resp);
         }
     }

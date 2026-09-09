@@ -20,6 +20,15 @@
         .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102,126,234,0.4); }
         .error { color: #e74c3c; margin-bottom: 15px; padding: 10px; background: #ffeaea; border-radius: 6px; font-size: 14px; }
         .icon { font-size: 48px; margin-bottom: 10px; }
+
+        *[id$=.errors] {
+            color: #dc3545;
+            font-style: italic;
+            font-size: 13px;
+            margin-top: 4px;
+            display: block;
+            text-align: left;
+        }
     </style>
 </head>
 <body>
@@ -38,11 +47,18 @@
 
         <form action="${pageContext.request.contextPath}/account/reset-password" method="post">
             <input type="hidden" name="email" value="${email}"/>
-            <label>Mã OTP:</label>
-            <input type="text" name="otp" maxlength="6" placeholder="000000" class="otp-input" required autofocus/>
 
-            <label>Mật khẩu mới:</label>
-            <input type="password" name="newPassword" placeholder="Nhập mật khẩu mới" required/>
+            <label>Mã OTP: <span style="color:red;">*</span></label>
+            <input type="text" name="otp" value="${not empty otp ? otp : param.otp}" maxlength="6" placeholder="000000" class="otp-input" required autofocus/>
+            <span id="otp.errors">${errors.otp}</span>
+
+            <label>Mật khẩu mới: <span style="color:red;">*</span></label>
+            <input type="password" name="newPassword" placeholder="Nhập mật khẩu mới (tối thiểu 6 ký tự)" required/>
+            <span id="newPassword.errors">${errors.newPassword}</span>
+
+            <label>Xác nhận mật khẩu mới: <span style="color:red;">*</span></label>
+            <input type="password" name="confirmPassword" placeholder="Nhập lại mật khẩu mới" required/>
+            <span id="confirmPassword.errors">${errors.confirmPassword}</span>
 
             <button type="submit" class="btn btn-submit">Đặt lại mật khẩu</button>
         </form>

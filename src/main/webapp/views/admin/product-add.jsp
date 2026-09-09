@@ -18,6 +18,14 @@
         .btn-submit { background: #4CAF50; }
         .btn-reset { background: #2196F3; }
         .back-link { display: inline-block; margin-bottom: 15px; color: #666; text-decoration: none; }
+
+        *[id$=.errors] {
+            color: #dc3545;
+            font-style: italic;
+            font-size: 13px;
+            margin-top: 4px;
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -27,34 +35,38 @@
 
         <form action="<c:url value="/admin/product/insert"/>" method="post" enctype="multipart/form-data">
 
-            <label>Tên sản phẩm:</label>
-            <input type="text" name="productName" placeholder="Nhập tên sản phẩm" required/>
+            <label>Tên sản phẩm: <span style="color:red;">*</span></label>
+            <input type="text" name="productName" value="${not empty productName ? productName : param.productName}" placeholder="Nhập tên sản phẩm" required/>
+            <span id="productName.errors">${errors.productName}</span>
 
-            <label>Giá:</label>
-            <input type="number" name="price" placeholder="Nhập giá sản phẩm" step="1000" min="0" required/>
+            <label>Giá (VNĐ): <span style="color:red;">*</span></label>
+            <input type="number" name="price" value="${not empty price ? price : param.price}" placeholder="Nhập giá sản phẩm (>= 0)" step="1000" min="0" required/>
+            <span id="price.errors">${errors.price}</span>
 
             <label>Mô tả:</label>
-            <textarea name="description" placeholder="Nhập mô tả sản phẩm"></textarea>
+            <textarea name="description" placeholder="Nhập mô tả sản phẩm">${not empty description ? description : param.description}</textarea>
 
-            <label>Danh mục:</label>
+            <label>Danh mục: <span style="color:red;">*</span></label>
             <select name="cateId" required>
                 <option value="">-- Chọn danh mục --</option>
                 <c:forEach items="${categories}" var="cate">
-                    <option value="${cate.categoryid}">${cate.categoryname}</option>
+                    <option value="${cate.categoryid}" ${cateId == cate.categoryid ? 'selected' : ''}>${cate.categoryname}</option>
                 </c:forEach>
             </select>
+            <span id="cateId.errors">${errors.cateId}</span>
 
             <label>Link ảnh (URL):</label>
-            <input type="text" name="imageUrl" placeholder="https://... (tùy chọn)"/>
+            <input type="text" name="imageUrl" value="${not empty imageUrl ? imageUrl : param.imageUrl}" placeholder="https://... (tùy chọn)"/>
 
             <label>Upload ảnh:</label>
-            <input type="file" name="imageFile"/>
+            <input type="file" name="imageFile" accept="image/*"/>
+            <span id="imageFile.errors">${errors.imageFile}</span>
 
             <label>Trạng thái:</label>
             <div class="radio-group">
-                <input type="radio" name="status" value="1" checked>
+                <input type="radio" name="status" value="1" ${empty status || status == 1 ? 'checked' : ''}>
                 <label>Hoạt động</label>
-                <input type="radio" name="status" value="0">
+                <input type="radio" name="status" value="0" ${status == 0 ? 'checked' : ''}>
                 <label>Khóa</label>
             </div>
 

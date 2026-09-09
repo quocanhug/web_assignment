@@ -19,6 +19,15 @@
         .error { color: #e74c3c; margin-bottom: 15px; padding: 10px; background: #ffeaea; border-radius: 6px; font-size: 14px; }
         .success { color: #27ae60; margin-bottom: 15px; padding: 10px; background: #eafff0; border-radius: 6px; font-size: 14px; }
         .icon { font-size: 48px; margin-bottom: 10px; }
+
+        *[id$=.errors] {
+            color: #dc3545;
+            font-style: italic;
+            font-size: 13px;
+            margin-top: 6px;
+            display: block;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -37,7 +46,9 @@
 
         <form action="${pageContext.request.contextPath}/account/verify" method="post">
             <input type="hidden" name="email" value="${email}"/>
-            <input type="text" name="otp" maxlength="6" placeholder="000000" required autofocus/>
+            <input type="text" name="otp" value="${not empty otp ? otp : param.otp}" maxlength="6" placeholder="000000" required autofocus/>
+            <span id="otp.errors">${errors.otp}</span>
+
             <button type="submit" class="btn btn-submit">Xác nhận</button>
         </form>
     </div>

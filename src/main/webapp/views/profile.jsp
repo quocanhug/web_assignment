@@ -39,6 +39,14 @@
 
         .current-img { margin-top: 8px; }
         .current-img img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 2px solid #eee; }
+
+        *[id$=.errors] {
+            color: #dc3545;
+            font-style: italic;
+            font-size: 13px;
+            margin-top: 4px;
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -81,21 +89,24 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Họ và tên</label>
+                        <label>Họ và tên: <span style="color:red;">*</span></label>
                         <input type="text" name="fullname" value="${user.fullname}" required placeholder="Nhập họ và tên"/>
+                        <span id="fullname.errors">${errors.fullname}</span>
                     </div>
 
                     <div class="form-group">
-                        <label>Số điện thoại</label>
+                        <label>Số điện thoại:</label>
                         <input type="text" name="phone" value="${user.phone}" placeholder="Nhập số điện thoại"/>
+                        <span id="phone.errors">${errors.phone}</span>
                     </div>
 
                     <div class="form-group">
-                        <label>Ảnh đại diện</label>
+                        <label>Ảnh đại diện:</label>
                         <div class="file-upload">
                             <input type="file" name="avatar" accept="image/*"/>
-                            <p class="file-hint">Chấp nhận: JPG, PNG, GIF. Để trống nếu không thay đổi.</p>
+                            <p class="file-hint">Chấp nhận: JPG, PNG, GIF, WEBP. Tối đa 5MB. Để trống nếu không thay đổi.</p>
                         </div>
+                        <span id="avatar.errors">${errors.avatar}</span>
                         <c:if test="${not empty user.image}">
                             <div class="current-img">
                                 <p style="font-size:12px;color:#888;margin-bottom:4px;">Ảnh hiện tại:</p>
